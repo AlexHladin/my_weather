@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MyWeater</title>
+	<style>
+		
+	</style>
+</head>
+<body>
+	<h1>Kiev</h1>
+	<div class="content">
+		
+	</div>
+
+	<script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script>
+		var city = $('h1').html();
+		
+		$.ajax({
+			method: 'GET',
+			url: '/api/getCurrentWeather/' + city,
+			dataType: 'json',
+			success: function(data) {
+				alert(data);
+			}
+		});
+	</script>
+</body>
+</html>

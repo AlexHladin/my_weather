@@ -1,0 +1,28 @@
+{
+  "name": "my-weather",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexGladin/my_weather.git"
+  },
+  "author": "Alex Gladin (alexgladin17@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.5.0",
+    "body-parser": "~1.17.1",
+    "config": "^1.26.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "ejs": "~2.5.6",
+    "express": "~4.15.2",
+    "morgan": "~1.8.1",
+    "mysql": "^2.14.1",
+    "nodemon": "^1.11.0",
+    "request": "^2.81.0",
+    "serve-favicon": "~2.4.2"
+  }
+}
