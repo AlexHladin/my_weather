@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>MyWeater</title>
+	<title><%= title %></title>
 	<style>
 		
 	</style>
 </head>
 <body>
-	<h1>Kiev</h1>
-	<div class="content">
+	<h1><%= city %></h1>
+	<div id="content">
 		
 	</div>
 
@@ -22,7 +22,7 @@
 			url: '/api/getCurrentWeather/' + city,
 			dataType: 'json',
 			success: function(data) {
-				alert(data);
+				$('#content').html(data.main.temp);
 			}
 		});
 	</script>
