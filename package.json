@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "standard"
   },
   "repository": {
     "type": "git",
@@ -21,8 +22,12 @@
     "express": "~4.15.2",
     "morgan": "~1.8.1",
     "mysql": "^2.14.1",
+    "node-where": "^1.1.0",
     "nodemon": "^1.11.0",
     "request": "^2.81.0",
     "serve-favicon": "~2.4.2"
+  },
+  "devDependencies": {
+    "standard": "^10.0.3"
   }
 }

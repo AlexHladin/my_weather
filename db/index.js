@@ -1,4 +1,10 @@
 module.exports = {
+	getIdByCityName: (db, city, next) => {
+		if (db)
+			db.query('SELECT cityId FROM City WHERE CityName="' + city + '";', next);
+		else
+			next('Invalid arguments');
+	},
 	getUniqCityId: (db, next) => {
 		if (db)
 			db.query('SELECT DISTINCT cityId as id FROM City;', next);
@@ -23,16 +29,16 @@ module.exports = {
 		else
 			next('Invalid arguments');
 	},
+	saveCityName: (db, cityId, city, country, next) => {
+		if (city && city.length) 
+			db.query('INSERT INTO City SELECT * FROM ( SELECT ' + cityId + ', "' + country + '", "' + city + '") as tmp WHERE NOT EXISTS ( SELECT cityId FROM City WHERE cityId = ' + cityId + ' AND CityName = "' + city + '" );', next);
+		else
+			next('Invalid arguments');
+	},
 	saveWeatherToDB: (db, data, next) => {
 		if (db && data) {
 			db.query('INSERT IGNORE INTO CurrentWeather(cityId, UpdateTime, Additional) VALUES(' + data.id +', FROM_UNIXTIME(' + data.dt + '), \'' + JSON.stringify(data) + '\')', next);
 		} else
-			next('Invalid arguments');
-	},
-	saveCityName: (db, cityId, city, country, next) => {
-		if (city && city.length)
-			db.query('INSERT INTO City SELECT * FROM ( SELECT ' + cityId + ', "' + country + '", "' + city + '") as tmp WHERE NOT EXISTS ( SELECT cityId FROM City WHERE cityId = ' + cityId + ' AND CityName = "' + city + '" )', next);
-		else
 			next('Invalid arguments');
 	},
 	saveForecastWeather: (db, cityId, elements, next) => {

@@ -1,7 +1,10 @@
+const LOG_FILE = 'logs/server.log';
+
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('config');
@@ -11,6 +14,12 @@ var index = require('./routes/index');
 var api = require('./routes/api');
 
 var ApiAccessor = require('./server/ApiAccessor');
+
+// db methods
+var dbUtils = require('./db');
+
+var logFile = path.join(__dirname, LOG_FILE);
+var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 var app = express();
 
@@ -58,16 +67,17 @@ connection.connect((err) => {
 	console.log('Database connected ', connection.threadId);
 });
 
-// db methods
-var dbUtils = require('./db');
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Log general server information to the console.
+app.use(morgan('dev'));
+// Write more specific log information to the server log file.
+app.use(morgan('combined', { stream: logFileStream }));
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -99,6 +109,8 @@ setInterval(() => {
     dbUtils.getUniqCityId(connection, (err, result) => {
         for (var i = 0; i < result.length; i++) {
             console.log('Update data of ', JSON.stringify(result[i]), ' ', i);
+            
+            // update current weather
             apiAccessor.getCurrentWeather(result[i], (error, response) => {
                 if (error) {
                     console.error(error);
@@ -108,6 +120,17 @@ setInterval(() => {
                     });
                 } else {
                     console.error('OpenWeatherMap API error');
+                }
+            });
+
+            // update forecast weather
+            apiAccessor.getForecastWeather(result[i], (error, response) => {
+                if (error) {
+                    console.error(error);
+                } else if (response) {
+                    dbUtils.saveForecastWeather(connection, response.city.id, response.list, (error) => {
+                        if (error) console.log(error);
+                    });
                 }
             });
         };
