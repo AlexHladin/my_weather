@@ -31,10 +31,8 @@ ApiAccessor.create = function(options) {
 }
 
 ApiAccessor.prototype.getForecastWeather = function(requestOptions, next) {
-	if (!requestOptions.city && !requestOptions.id) {
-		next(new Error('No City specified.'));
-		return;
-	}
+	if (!requestOptions.city && !requestOptions.id)
+		throw new Error('No City specified.');
 
 	var urlOptions = {
 		url: ApiAccessor.FORECAST_WEATHER,
@@ -60,10 +58,8 @@ ApiAccessor.prototype.getForecastWeather = function(requestOptions, next) {
 }
 
 ApiAccessor.prototype.getCurrentWeather = function(requestOptions, next) {
-	if (!requestOptions.city && !requestOptions.id) {
-		next(new Error('No City specified.'));
-		return;
-	}
+	if (!requestOptions.city && !requestOptions.id)
+		throw new Error('No City specified.');
 
 	var urlOptions = {
 		url: ApiAccessor.CURRENT_WEATHER,

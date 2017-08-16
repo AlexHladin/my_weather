@@ -8,15 +8,12 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('config');
-var mysql = require('mysql');
 
 var index = require('./routes/index');
 var api = require('./routes/api');
 
 var ApiAccessor = require('./server/ApiAccessor');
-
-// db methods
-var dbUtils = require('./db');
+var apiCache = require('./server/ApiCache');
 
 var logFile = path.join(__dirname, LOG_FILE);
 var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
@@ -31,41 +28,6 @@ var apiAccessor = ApiAccessor.create({
     apiKey: config.get('weatherService.apiKey')
 });
 app.set('apiAccessor', apiAccessor);
-
-// database connection setup
-
-var handleDisconnect = (conn) => {
-  conn.on('error', function(err) {
-    if (!err.fatal) {
-      return;
-    }
-
-    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-      throw err;
-    }
-
-    console.log('Re-connecting lost connection: ' + err);
-
-    connection = mysql.createConnection(config.get('dbConfig'));
-    handleDisconnect(connection);
-    connection.connect((err) => {
-        if (err) throw 'Database connection error ' + err.stack;
-        
-        app.set('db', connection);
-        console.log('Database connected ', connection.threadId);
-    });
-  });
-}
-
-var connection = mysql.createConnection(config.get('dbConfig'));
-handleDisconnect(connection);
-
-connection.connect((err) => {
-	if (err) throw 'Database connection error ' + err.stack;
-	
-	app.set('db', connection);
-	console.log('Database connected ', connection.threadId);
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -106,35 +68,34 @@ app.use(function(err, req, res, next) {
 
 // schedulars
 setInterval(() => {
-    dbUtils.getUniqCityId(connection, (err, result) => {
-        for (var i = 0; i < result.length; i++) {
-            console.log('Update data of ', JSON.stringify(result[i]), ' ', i);
-            
-            // update current weather
-            apiAccessor.getCurrentWeather(result[i], (error, response) => {
-                if (error) {
-                    console.error(error);
-                } else if (response) {
-                    dbUtils.saveWeatherToDB(connection, response, (error) => {
-                        if (error) console.error(error);
-                    });
-                } else {
-                    console.error('OpenWeatherMap API error');
-                }
-            });
+    var cache = apiCache.getInstance().getCache();
+    var currentTime = new Date().getTime();
 
-            // update forecast weather
-            apiAccessor.getForecastWeather(result[i], (error, response) => {
-                if (error) {
-                    console.error(error);
-                } else if (response) {
-                    dbUtils.saveForecastWeather(connection, response.city.id, response.list, (error) => {
-                        if (error) console.log(error);
-                    });
+    for (var obj in cache) {
+        // update current weather
+        if (cache[obj].currentWeatherUpdateTime && (currentTime - cache[obj].currentWeatherUpdateTime >= config.get('schedulerPause'))) {
+            console.log('Update current weather of', obj, 'city');
+            apiAccessor.getCurrentWeather({ id: obj }, (err, res) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log('Current weather of city', obj, 'succesful updated');
                 }
             });
-        };
-    });
+        }
+
+        // update forecast weather
+        if (cache[obj].forecastWeatherUpdateTime && (currentTime - cache[obj].forecastWeatherUpdateTime >= config.get('schedulerPause'))) {
+            console.log('Update forecast weather of', obj, 'city');
+            apiAccessor.getForecastWeather({ id: obj }, (err, res) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log('Forecast weather of city', obj, 'succesful updated');
+                }
+            });
+        }
+    }
 }, config.get('schedulerPause'));
 
 module.exports = app;
