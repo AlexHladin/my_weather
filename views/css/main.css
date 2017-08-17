@@ -1,0 +1,218 @@
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr,
+ address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var,
+ b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot,
+ thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup,
+ menu, nav, section, summary, time, mark, audio, video, button, select, a {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    list-style-type: none;
+	font-family: 'Century Gothic', sans-serif;	
+    color: #a8a8a8;
+}
+ 
+a, a:hover, a:active{
+	text-decoration: none;
+	color: #a8a8a8;;
+}
+html, body{
+	height: 100%;
+}
+.md-12{
+	background-color:black;
+	height: 660px;
+}
+.md-11{
+	opacity: 0.8;
+	z-index: 0;
+	margin-top: -560px;
+	height: 530px;
+}
+.col-md-10{
+	z-index: 10;
+}
+.font{
+	font-family: 'Josefin Sans', 'Open Sans Condensed';
+}
+.weather-box{
+/*	margin-top:20px;*/
+	margin-left: 30px;
+	position: absolute;
+	width: 500px;
+	height: 186px;
+	overflow: hidden;
+
+}
+.weather-box > li{
+	color:blue;
+	width: 100px;
+}
+
+.active-day{
+	border-style: solid solid none !important;  /* (верхняя граница) (левая и правая граница) (нижняя граница) */ 
+	border-color: rgb(34, 34, 34) !important;  /* одновременно для четырёх границ элемента */ 
+	border-width: 1px !important;  /* одновременно для четырёх границ элемента */ 
+}
+.disable-day{
+	border-style: none none solid;  /* (верхняя граница) (левая и правая граница) (нижняя граница) */ 
+	border-color: rgb(34, 34, 34);  /* одновременно для четырёх границ элемента */ 
+	border-width: 1px;  /* одновременно для четырёх границ элемента */ 
+}
+.weather-box > li > a, #left-scroll > a, #right-scroll > a{
+	display: block;
+	height: 100%;
+ }
+.weather-box > li > a:hover, .caret-w:hover{
+	background-color: rgba(255,255,255,.1);
+	cursor: pointer;
+ }
+.weather-box > li > a > span:nth-of-type(1), .weather-box > li > a > span:nth-of-type(2){
+	line-height: 2.9 !important;
+}
+.weather-box > li > a > span:nth-of-type(3),.weather-box > li > a > span:nth-of-type(4){
+	line-height: 1.2 !important;
+}
+.day-name{
+	color:white;
+	font-weight: 400;
+	font-size: 14px;
+}
+.icon > i{
+	color:blue;
+}
+.temp-day, .temp-day > sup{
+	color:white;
+	font-size: 28px;
+}
+.temp-night, .temp-night > sup{
+	font-weight: 500;
+	font-size: 28px;
+}
+sup{
+	font-size: 18px !important;
+}
+.main-temp{
+	font-size: 86pt;
+	margin-top: 50px;
+	color:white;
+}
+.main-temp > .sup{
+	font-size: 38pt;
+	vertical-align: top;
+	color:white;
+}
+.cc{
+	height: 150px;
+	margin-top: 30px;
+}
+.weather-description{
+	margin-top: 50px;
+	outline-width:1.2 !important;
+	float: left;
+	position: absolute;
+ }
+.weather-description > li{
+
+	font-size: 14px;
+ }
+ .weather-description > li:nth-of-type(2),  .weather-description > li:nth-of-type(3){
+ 	margin-left: 40px;	
+ }
+.title{
+	font-size: 26px;
+	color:white;
+	float: left;
+}
+
+#C-F{
+	margin-left: 20px;
+	margin-top: 30px;
+	width: 30px; 
+	position: absolute;
+	display: inline;
+}
+strong{
+	color:white;
+	font-size: 40px;
+	font-weight: 200;
+}
+
+#C-F > li:first-child{
+	border-style: none none solid;  /* (верхняя граница) (левая и правая граница) (нижняя граница) */ 
+	border-color: rgb(34, 34, 34);  /* одновременно для четырёх границ элемента */ 
+	border-width: 1px;  /* одновременно для четырёх границ элемента */ 
+
+}
+#C-F > li:hover{
+	cursor: pointer;
+}
+.caret-w{
+	height: 185px;
+	width: 30px !important;
+}
+.caret-w > a > i {
+	text-align: center;
+	margin: 76px 7px;
+	color: white;
+}
+#search{
+	margin-top: 30px;
+	width: 300px;
+	background-color: rgba(255,255,255, .1);
+	border: none;
+}
+.col-md-10 > .col-md-5 , #left-scroll{
+	float:left;
+}
+
+.scroll-box{
+	width: 560px;;
+/*	height: 206px;  */
+	overflow: hidden;
+
+}
+
+#right-scroll{
+	float:right;
+}
+.hidden_day{
+	display:none !important;
+}
+.visible_day{
+	display:visible !important;
+}
+
+
+.form-control{
+	display: block;
+	width: 80% !important;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 16px;
+	line-height: 1.42857143;
+	color: #fff;
+	background-color: #0000;
+	background-image: none;
+	border: 1px solid #222222;
+	border-radius: 0;
+	margin-bottom: 15px;
+}
+.form-control:hover, .form-control:focus{
+	border-color: #222222 !important;
+	box-shadow:none;
+	background-color: rgba(255,255,255, .1);	
+}
+.input-group-addon{
+	background-color: #0000;
+	border-radius: 0; 
+	border: 1px solid #222222;
+}
+
+.input-group:hover > span > i{
+	color:#0000FF;
+}
+
+
+

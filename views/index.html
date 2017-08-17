@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--для корректного отображения сайта на мобильных устройствах -->   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--Кодировка-->
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Weather</title>
+<!--Таблица стилей-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">  
+<!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="css/main.css" rel="stylesheet">
+<!-- Шрифт-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Open+Sans+Condensed:300" rel="stylesheet"> 
+
+<!--    <script src="js/particles.js"></script> -->
+
+    <script src="js/scroll.js"></script>
+</head>
+<body>
+<div class="conteiner">
+
+<div class="col-md-12 md-12" >
+ 
+<div class="col-md-1"></div>
+<div class="col-md-10">
+
+<!--
+<div class="col-md-12">
+<div class="col-md-7"></div>
+  <div class="col-md-4">
+      <input type="text" class="form-control font">
+  </div>
+<div class="col-md-1"></div>
+</div>
+-->
+
+
+    <div class="col-md-3">
+        <span class="main-temp font">36<span class="sup">°</span> </span>
+        <ul id="C-F">
+            <li><a><strong>C</strong></a></li>
+            <li><a>F</a></li>
+        </ul>
+    </div>
+    <div class="col-md-7 cc">
+        <div class="col-md-12">
+
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-home" aria-hidden="true"></i></span>
+          <input type="text" class="form-control font">
+        </div>
+            <br>
+            <span class="title font">Mostly Cloudy</span> 
+            <ul  class="nav navbar-nav weather-description">
+                <li>Feels Like 24° <br> Visibility 10 km</li>
+                <li> Wind <span class="glyphicon glyphicon-arrow-down"></span> 25 km/h <br> Humidity 65%</li>
+                <li>Barometer 1015.00 mb <br> Dew Point 17°</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="scroll-box" id="scroll">
+
+        <ul class="weather-box nav navbar-nav" >
+            <li>
+                <a>
+                    <span class="day-name">Tue, 1</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <span class="day-name">Wed, 2</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <span class="day-name">Thu, 3</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <span class="day-name">Fri, 4</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>  
+            <li>
+                <a>
+                    <span class="day-name">Sat, 5</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>   
+            <li>
+                <a>
+                    <span class="day-name">Sat, 6</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>  
+            <li>
+                <a>
+                    <span class="day-name">Sat, 7</span><br>
+                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+                    <span class="temp-day font">36<sup>°</sup></span><br>
+                    <span class="temp-night font">26<sup>°</sup></span><br>
+                </a>
+            </li>  
+    
+        </ul> 
+
+    </div>
+    <div class="col-md-4"></div>
+ </div>
+<div class="col-md-1"></div>
+</div>
+<!----><div class="col-md-12 md-11"  id="particles-js"></div>  
+</div>   
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+  <script>
+    particlesJS.load('particles-js', 'json/particles.json', function(){
+      console.log('particles.json loaded...');
+    });
+  </script>
+</body>
+</html>
