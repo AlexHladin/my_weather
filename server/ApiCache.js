@@ -13,6 +13,9 @@ var apiCache = (function() {
 
 		return {
 			// public variables and methods
+			getNamesCache: function() {
+				return namesCache;
+			},
 			getCache: function() {
 				return cache;
 			},

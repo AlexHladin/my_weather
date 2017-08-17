@@ -19,7 +19,11 @@ router.get('/getCurrentWeather/:city', (req, res, next) => {
 });
 
 router.get('/search/:input', (req, res, next) => {
-	apiCache.getInstance().getCache().find((e) => console.log(e));
+	var filteredCities = Object.keys(apiCache.getInstance().getNamesCache()).filter((e) => {
+			return e.indexOf(req.params.input) >= 0;
+		});
+
+	res.send(filteredCities);
 });
 
 module.exports = router;
