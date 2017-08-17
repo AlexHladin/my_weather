@@ -1,7 +1,6 @@
 var async = require('async');
-var dbUtils = require('./../db');
 var where = require('node-where');
-var fs = require('fs');
+
 /* singleton */
 var apiCache = (function() {
 
@@ -25,15 +24,17 @@ var apiCache = (function() {
 				} else {
 					async.waterfall([
 						(cb) => {
-							if (place.city && place.city.length) {
-								where.is(place.city, cb);
-							}
+							if (cityId) {
+								cb(null, { id: cityId });
+							} else if (place.city && place.city.length) {
+								where.is(place.city, (error, whereRes) => {
+									cb(null, { city: whereRes.get('city') || whereRes.get('region') });
+								});
+							} else cb('City id not found');
 						},
 						(whereRes, cb) => {
 							try {
-								var city = whereRes.get('city') || whereRes.get('region');
-
-								apiAccessor.getForecastWeather({ city: city }, (error, result) => {
+								apiAccessor.getForecastWeather(whereRes, (error, result) => {
 									if (error) {
 										next(error);
 										return;
@@ -60,19 +61,20 @@ var apiCache = (function() {
 
 				if (cityId && cache[cityId].currentWeatherUpdateTime - new Date().getTime() < 3600) {
 					next(null, cache[cityId].currentWeather);
-				}
-				else {
+				} else {
 					async.waterfall([
 						(cb) => {
-							if (place.city && place.city.length) {
-								where.is(place.city, cb);
-							}
+							if (cityId) {
+								cb(null, { id: cityId });
+							} else if (place.city && place.city.length) {
+								where.is(place.city, (error, whereRes) => {
+									cb(null, { city: whereRes.get('city') || whereRes.get('region') });
+								});
+							} else cb('City id not found');
 						},
 						(whereRes, cb) => {
-							var city = whereRes.get('city') || whereRes.get('region');
-
 							try {	
-								apiAccessor.getCurrentWeather({ city: city }, (error, result) => {
+								apiAccessor.getCurrentWeather(whereRes, (error, result) => {
 									if (error) {
 										cb(error);
 										return;
