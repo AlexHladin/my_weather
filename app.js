@@ -1,8 +1,10 @@
-const LOG_FILE = 'logs/server.log';
+const LOG_PATH = 'logs';
+const LOG_FILE = 'server.log';
 
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -15,7 +17,24 @@ var api = require('./routes/api');
 var ApiAccessor = require('./server/ApiAccessor');
 var apiCache = require('./server/ApiCache');
 
-var logFile = path.join(__dirname, LOG_FILE);
+const FULL_LOG_PATH = path.join(LOG_PATH, LOG_FILE);
+
+// check if LOG_PATH exist
+if (!fs.existsSync(LOG_PATH)) {
+    fs.mkdirSync(LOG_PATH);
+    console.log('Log folder created.');
+}
+
+// check if LOG_FILE exist
+if (!fs.existsSync(FULL_LOG_PATH)) {
+    fs.writeFile(FULL_LOG_PATH, '', (err) => {
+        if (err) {
+            console.error('Log file not created!', err);
+        } else console.log('Log file created.');
+    });
+}
+
+var logFile = path.join(__dirname, FULL_LOG_PATH);
 var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 var app = express();
