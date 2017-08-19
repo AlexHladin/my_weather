@@ -9,7 +9,6 @@ var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// var config = require('config');
 
 var index = require('./routes/index');
 var api = require('./routes/api');
@@ -18,8 +17,7 @@ var ApiAccessor = require('./server/ApiAccessor');
 var apiCache = require('./server/ApiCache');
 
 const FULL_LOG_PATH = path.join(LOG_PATH, LOG_FILE);
-console.log(process.env.OPENWEATHER_API_KEY);
-console.log(process.env.SCHEDULER_PAUSE);
+
 // check if LOG_PATH exist
 if (!fs.existsSync(LOG_PATH)) {
     fs.mkdirSync(LOG_PATH);
@@ -40,12 +38,9 @@ var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 var app = express();
 
-// config sharing
-// app.set('config', config);
-
 // api accessor settings
 var apiAccessor = ApiAccessor.create({
-    apiKey: process.env.OPENWEATHER_API_KEY// config.get('weatherService.apiKey')
+    apiKey: process.env.OPENWEATHER_API_KEY
 });
 app.set('apiAccessor', apiAccessor);
 
@@ -93,7 +88,7 @@ setInterval(() => {
 
     for (var obj in cache) {
         // update current weather
-        if (cache[obj].currentWeatherUpdateTime && (currentTime - cache[obj].currentWeatherUpdateTime >= config.get('schedulerPause'))) {
+        if (cache[obj].currentWeatherUpdateTime && (currentTime - cache[obj].currentWeatherUpdateTime >= process.env.SCHEDULER_PAUSE)) {
             console.log('Update current weather of', obj, 'city');
             apiAccessor.getCurrentWeather({ id: obj }, (err, res) => {
                 if (err) {
@@ -105,7 +100,7 @@ setInterval(() => {
         }
 
         // update forecast weather
-        if (cache[obj].forecastWeatherUpdateTime && (currentTime - cache[obj].forecastWeatherUpdateTime >= config.get('schedulerPause'))) {
+        if (cache[obj].forecastWeatherUpdateTime && (currentTime - cache[obj].forecastWeatherUpdateTime >= process.env.SCHEDULER_PAUSE)) {
             console.log('Update forecast weather of', obj, 'city');
             apiAccessor.getForecastWeather({ id: obj }, (err, res) => {
                 if (err) {
@@ -116,6 +111,6 @@ setInterval(() => {
             });
         }
     }
-}, process.env.SCHEDULER_PAUSE/*config.get('schedulerPause')*/);
+}, process.env.SCHEDULER_PAUSE);
 
 module.exports = app;
