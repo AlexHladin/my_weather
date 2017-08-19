@@ -8,18 +8,18 @@
 	</style>
 </head>
 <body>
-	<h1><%= city %></h1>
+	<h1><%= location %></h1>
 	<div id="content">
 		
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
 	<script>
-		var city = $('h1').html();
+		var location = $('h1').html();
 		
 		$.ajax({
 			method: 'GET',
-			url: '/api/getCurrentWeather/' + city,
+			url: '/api/getCurrentWeather/' + location,
 			dataType: 'json',
 			success: function(data) {
 				$('#content').html(data.main.temp);
