@@ -31,7 +31,7 @@ var apiCache = (function() {
 								cb(null, { id: cityId });
 							} else if (place.city && place.city.length) {
 								where.is(place.city, (error, whereRes) => {
-									cb(null, { city: whereRes.get('city') || whereRes.get('region') });
+									cb(null, { city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') });
 								});
 							} else cb('City id not found');
 						},
@@ -71,7 +71,7 @@ var apiCache = (function() {
 								cb(null, { id: cityId });
 							} else if (place.city && place.city.length) {
 								where.is(place.city, (error, whereRes) => {
-									cb(null, { city: whereRes.get('city') || whereRes.get('region') });
+									cb(null, { city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') });
 								});
 							} else cb('City id not found');
 						},
