@@ -9,7 +9,7 @@ var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var config = require('config');
+// var config = require('config');
 
 var index = require('./routes/index');
 var api = require('./routes/api');
@@ -18,7 +18,8 @@ var ApiAccessor = require('./server/ApiAccessor');
 var apiCache = require('./server/ApiCache');
 
 const FULL_LOG_PATH = path.join(LOG_PATH, LOG_FILE);
-
+console.log(process.env.OPENWEATHER_API_KEY);
+console.log(process.env.SCHEDULER_PAUSE);
 // check if LOG_PATH exist
 if (!fs.existsSync(LOG_PATH)) {
     fs.mkdirSync(LOG_PATH);
@@ -40,11 +41,11 @@ var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 var app = express();
 
 // config sharing
-app.set('config', config);
+// app.set('config', config);
 
 // api accessor settings
 var apiAccessor = ApiAccessor.create({
-    apiKey: config.get('weatherService.apiKey')
+    apiKey: process.env.OPENWEATHER_API_KEY// config.get('weatherService.apiKey')
 });
 app.set('apiAccessor', apiAccessor);
 
@@ -115,6 +116,6 @@ setInterval(() => {
             });
         }
     }
-}, config.get('schedulerPause'));
+}, process.env.SCHEDULER_PAUSE/*config.get('schedulerPause')*/);
 
 module.exports = app;
