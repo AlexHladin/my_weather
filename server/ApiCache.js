@@ -61,7 +61,7 @@ var apiCache = (function() {
 			},
 			getCachedCurrentWeather: function(place, apiAccessor, next) {
 				var cityId = namesCache[place.city];
-
+				console.log('City id', cityId);
 				if (cityId && cache[cityId].currentWeatherUpdateTime - new Date().getTime() < 3600) {
 					next(null, cache[cityId].currentWeather);
 				} else {
@@ -71,13 +71,21 @@ var apiCache = (function() {
 								cb(null, { id: cityId });
 							} else if (place.city && place.city.length) {
 								where.is(place.city, (error, whereRes) => {
+									console.log('where error', error);
+									console.log('whereRes', whereRes);
 									cb(null, { city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') });
 								});
-							} else cb('City id not found');
+							} else {
+								console.log('City id not found');
+								cb('City id not found');
+							}
 						},
 						(whereRes, cb) => {
 							try {	
+								console.log('Cb res', whereRes);
 								apiAccessor.getCurrentWeather(whereRes, (error, result) => {
+									console.log('CWError', error);
+									console.log('CWResult', result);
 									if (error) {
 										cb(error);
 										return;
