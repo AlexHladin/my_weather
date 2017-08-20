@@ -13,8 +13,6 @@ router.get('/getForecastWeather/:city', (req, res, next) => {
 
 router.get('/getCurrentWeather/:city', (req, res, next) => {
 	apiCache.getInstance().getCachedCurrentWeather(req.params, req.app.get('apiAccessor'), (error, result) => {
-		console.log('api error', error);
-		console.log('api resp', result);
 		if (error) next(error);
 		else res.send(result);
 	});
