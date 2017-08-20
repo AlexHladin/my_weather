@@ -139,35 +139,3 @@ function convert_F_to_C(){
 	});
 
 }
-//---------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-/*
-НЕ РАБОТАЕТ, ПОТОМУ, ЧТО ФАЙЛ (particles.min.js) НА СЕРВЕРЕ ССЫЛАЕТСЯ НА particles.json И НЕВОЗМОЖНО ПОМЕНЯТЬ ИМЯ ДЛЯ 2-Х ФАЙЛОВ
-
-
-<script>
-	var nowdate = new Date();
-	var nowtime = nowdate.getHours();
-	if ( nowtime>=0 && nowtime<6 || nowtime>=18){
-	        particlesJS.load('particles-js', 'json/particles_night.json', function(){
-	            console.log('particles.json loaded...');
-	        });
-	}
-	if ( nowtime>=6 && nowtime<11 || nowtime>=11 && nowtime<18){
-	        particlesJS.load('particles-js', 'json/particles_morning.json', function(){
-	            console.log('particles.json loaded...');
-	        });
-	}
-</script>
-*/
-
-
-
-
-
-

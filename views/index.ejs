@@ -1,28 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<title><%= title %></title>
-	<style>
-		
-	</style>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>MyWeather</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Open+Sans+Condensed:300" rel="stylesheet"> 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/scroll.js"></script>
 </head>
 <body>
-	<h1><%= place %></h1>
-	<div id="content">
-		
-	</div>
+<div class="conteiner">
+	<div class="col-md-12 md-12" >
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+    		<div class="col-md-3">
+				<span class="main-temp font"></span>
+		        <ul id="C-F">
+		            <li><a>C</a></li>
+		            <li><a>F</a></li>
+		        </ul>
+    		</div>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
+			<div class="col-md-7 cc">
+			    <div class="col-md-12">
+				    <div class="input-group">
+				    	<span class="input-group-addon"><i class="fa fa-home" aria-hidden="true"></i></span>
+				      	<input type="text" class="form-control font">
+				    </div>
+			        <br>
+			        <span class="title font">Mostly Cloudy</span> 
+			        <ul  class="nav navbar-nav weather-description">
+			            <li>
+			            	<p id="sunrise-value"></p>
+			            	<p id="sunset-value"></p>
+			            </li>
+			            <li>
+			            	<p id="wind-value"></p>
+			            	<p id="humidity-value"></p>
+			            </li>
+			            <li>
+			            	<p id="barometer-value"></p>
+			            	<p>Visibility 10 km</p>
+			            </li>
+			        </ul>
+			    </div>
+			</div>
+
+			<div class="scroll-box" id="scroll">
+				<ul class="weather-box nav navbar-nav" >
+		            <li>
+		                <a>
+		                    <span class="day-name">Tue, 1 </span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">36<sup>°</sup></span><br>
+		                    <span class="temp-night font">21<sup>°</sup></span><br>
+		                </a>
+		            </li>
+		            <li>
+		                <a>
+		                    <span class="day-name">Wed, 2</span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">37<sup>°</sup></span><br>
+		                    <span class="temp-night font">22<sup>°</sup></span><br>
+		                </a>
+		            </li>
+		            <li>
+		                <a>
+		                    <span class="day-name">Thu, 3</span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">38<sup>°</sup></span><br>
+		                    <span class="temp-night font">25<sup>°</sup></span><br>
+		                </a>
+		            </li>
+		            <li>
+		                <a>
+		                    <span class="day-name">Fri, 4</span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">39<sup>°</sup></span><br>
+		                    <span class="temp-night font">28<sup>°</sup></span><br>
+		                </a>
+		            </li>  
+		            <li>
+		                <a>
+		                    <span class="day-name">Sat, 5</span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">25<sup>°</sup></span><br>
+		                    <span class="temp-night font">20<sup>°</sup></span><br>
+		                </a>
+		            </li>   
+		            <li>
+		                <a>
+		                    <span class="day-name">Sat, 6</span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">26<sup>°</sup></span><br>
+		                    <span class="temp-night font">23<sup>°</sup></span><br>
+		                </a>
+		            </li>  
+		            <li>
+		                <a>
+		                    <span class="day-name">Sat, 7</span><br>
+		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
+		                    <span class="temp-day font">27<sup>°</sup></span><br>
+		                    <span class="temp-night font">26<sup>°</sup></span><br>
+		                </a>
+		            </li>    
+        		</ul> 
+    		</div>    	
+    	<div class="col-md-4"></div>
+ 	</div>
+
+	<div class="col-md-1"></div>
+
+	</div>
+	<div class="col-md-12 md-11" id="particles-js"></div>  
+</div>
+
+<!---->
+	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
 	<script>
-		var place = $('h1').html();
+		particlesJS.load('particles-js', 'js/json/particles.json', function(){
+				console.log('particles.json loaded...');
+			});
+	</script>
+
+  	<script>
+  		var convertDateToHourMinuteFormat = function(timestamp) {
+  			var time = new Date((timestamp * 1000) - new Date().getTimezoneOffset() * 60);
+
+  			return time.getHours() + ':' + time.getMinutes();
+  		}
+
+		var place = 'Киев';//$('h1').html();
 
 		$.ajax({
 			method: 'GET',
 			url: '/api/getCurrentWeather/' + place,
 			dataType: 'json',
 			success: function(data) {
-				$('#content').html(data.main.temp);
+				// $('#content').html(data.main.temp);
+				$('.main-temp.font').html(Math.ceil(data.main.temp));
+				$('.title.font').html(data.weather[0].description);
+				$('#humidity-value').html('Humidity ' + data.main.humidity + '%');
+				$('#barometer-value').html('Barometer' + data.main.pressure + ' mb');
+				$('#wind-value').html('Wind ' + data.wind.speed + ' m/s ( ' + data.wind.deg + ' )');
+
+				$('#sunrise-value').html('Sunrise ' + convertDateToHourMinuteFormat(data.sys.sunrise));
+				$('#sunset-value').html('Sunset ' + convertDateToHourMinuteFormat(data.sys.sunset));
 			}
 		});
 	</script>
