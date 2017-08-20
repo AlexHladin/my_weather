@@ -78,6 +78,9 @@ ApiAccessor.prototype.getCurrentWeather = function(requestOptions, next) {
 	};
 	
 	request(urlOptions, (err, resp, body) => {
+		console.log('OWerror', err);
+		console.log('OWresult', resp);
+		console.log('OWBody', body);
 		if (err) {
 			next(err) 
 		} else if (body && body.cod == 200) {

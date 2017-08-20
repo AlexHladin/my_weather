@@ -37,7 +37,7 @@ var logFile = path.join(__dirname, FULL_LOG_PATH);
 var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 var app = express();
-console.log(app.get('env'));
+
 // api accessor settings
 var apiAccessor = ApiAccessor.create({
     apiKey: process.env.OPENWEATHER_API_KEY
