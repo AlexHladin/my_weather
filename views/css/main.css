@@ -117,7 +117,7 @@ sup{
 
 	font-size: 14px;
  }
- .weather-description > li:nth-of-type(2),  .weather-description > li:nth-of-type(3){
+ .weather-description > li:nth-of-type(2),  .weather-description > li:nth-of-type(3), .col-md-10 > .cc{
  	margin-left: 40px;	
  }
 .title{
@@ -133,9 +133,9 @@ sup{
 	position: absolute;
 	display: inline;
 }
-strong{
+.strong{
 	color:white;
-	font-size: 40px;
+	font-size: 50px;
 	font-weight: 200;
 }
 
@@ -214,5 +214,8 @@ strong{
 	color:#0000FF;
 }
 
-
+.fa-check{
+	margin-left: 8px;
+	color:#00FF6D;
+}
 
