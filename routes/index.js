@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
 		req.socket.remoteAddress ||
 		req.connection.socket.remoteAddress;
     
-	where.is(ip, (err, result) => {
+	where.is(/*ip*/'91.197.223.142', (err, result) => {
 		res.render('index', { title: 'My weather', place: result.get('city') || result.get('region') || result.get('country') });
 	});
 });
