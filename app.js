@@ -37,7 +37,7 @@ var logFile = path.join(__dirname, FULL_LOG_PATH);
 var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 var app = express();
-
+console.log(app.get('env'));
 // api accessor settings
 var apiAccessor = ApiAccessor.create({
     apiKey: process.env.OPENWEATHER_API_KEY
@@ -74,7 +74,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = err;//req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
