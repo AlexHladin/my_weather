@@ -62,7 +62,7 @@ var apiCache = (function() {
 			getCachedCurrentWeather: function(place, apiAccessor, next) {
 				var cityId = namesCache[place.city];
 
-				if (cityId && cache[cityId].currentWeatherUpdateTime - new Date().getTime() < 3600) {
+				if (cityId && cache[cityId].currentWeatherUpdateTime - new Date().getTime() < process.env.SCHEDULER_PAUSE) {
 					next(null, cache[cityId].currentWeather);
 				} else {
 					async.waterfall([

@@ -133,12 +133,13 @@
 
   	<script>
   		var convertDateToHourMinuteFormat = function(timestamp) {
-  			var time = new Date((timestamp * 1000) - new Date().getTimezoneOffset() * 60);
+  			var time = new Date(timestamp * 1000);
 
-  			return time.getHours() + ':' + time.getMinutes();
+  			// return time.getHours() + ':' + time.getMinutes();
+  			return time.toLocaleTimeString();
   		}
 
-		var place = 'Киев';//$('h1').html();
+		var place = 'Poznan';//$('h1').html();
 
 		$.ajax({
 			method: 'GET',
