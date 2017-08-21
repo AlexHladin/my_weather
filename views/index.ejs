@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Open+Sans+Condensed:300" rel="stylesheet"> 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="js/scroll.js"></script>
 </head>
 <body>
 <div class="conteiner">
@@ -30,10 +29,12 @@
 
 			<div class="col-md-7 cc">
 			    <div class="col-md-12">
-				    <div class="input-group">
-				    	<span class="input-group-addon"><i class="fa fa-home" aria-hidden="true"></i></span>
-				      	<input type="text" class="form-control font">
-				    </div>
+					<form action="">
+						<div class="input-group">
+				    		<span class="input-group-addon"><i class="fa fa-home" aria-hidden="true"></i></span>
+				      		<input id="user-input" type="text" class="form-control font">
+				    	</div>
+					</form>
 			        <br>
 			        <span class="title font"></span> 
 			        <ul  class="nav navbar-nav weather-description">
@@ -151,12 +152,28 @@
 </div>
 
 <!---->
+	<script src="js/scroll.js"></script>
+	<script src="js/auto_inputbox.js"></script>
 	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.textchange/0.1/jquery.textchange.min.js"></script>
 
 	<script>
-		particlesJS.load('particles-js', 'js/json/particles.json', function(){
+		particlesJS.load('particles-js', 'js/json/particles.json', function() {
 				console.log('particles.json loaded...');
 			});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#user-input').autoInput({
+				url: '/api/search/',
+				formatElement: function(el) {
+					return el;
+				}
+			});
+
+		});
 	</script>
 
   	<script>
@@ -172,6 +189,46 @@
   			var time = new Date(timestamp * 1000);
 
   			return days[time.getDay() - 1] + ', ' + time.getDate();
+  		}
+
+  		var setForecastData = function(minTemp, maxTemp, elInd) {
+  			var context = $('.weather-box.nav.navbar-nav>li>a').eq(elInd);
+			$('#temp-max-value', context).html(Math.round(maxTemp, 1) + '<sup>°</sup>');
+			$('#temp-min-value', context).html(Math.round(minTemp, 1) + '<sup>°</sup>');
+  		}
+
+  		var processForecastData = function(data, next) {
+  			var i = 0, elInd = 0;
+			while (i < data.list.length) {
+				var dateGroup = [];
+				var initDate = new Date((data.list[i].dt - new Date().getTimezoneOffset() * 60) * 1000).getDate();
+
+				var mappedDates = data.list.filter(function(el) {
+					return new Date((el.dt - new Date().getTimezoneOffset() * 60) * 1000).getDate() == initDate;
+				});
+
+				// find min temp
+				var minTemp, maxTemp;
+
+				if (mappedDates.length > 1) { 
+					minTemp = mappedDates.reduce(function(prev, current) {
+						return Math.min(isNaN(prev) ? prev.main.temp_min : prev, current.main.temp_min);
+					});
+
+					// find max temp
+					maxTemp = mappedDates.reduce(function(prev, current) {
+						return Math.max(isNaN(prev) ? prev.main.temp_max : prev, current.main.temp_max);
+					});
+				} else {
+					minTemp = mappedDates[0].main.temp_min;
+					maxTemp = mappedDates[0].main.temp_max;
+				}
+				
+				setForecastData(minTemp, maxTemp, elInd);
+
+				i += mappedDates.length;
+				elInd++;
+			}
   		}
 
 		var place = 'Кривой Рог';//$('h1').html();
@@ -197,34 +254,7 @@
 			method: 'GET',
 			url: 'api/getForecastWeather/' + place,
 			dataType: 'json',
-			success: function(data) {
-				var i = 0, elInd = 0;
-				while (i < data.list.length) {
-					var dateGroup = [];
-					var initDate = new Date((data.list[i].dt - new Date().getTimezoneOffset() * 60) * 1000).getDate();
-
-					var mappedDates = data.list.filter(function(el) {
-						return new Date((el.dt - new Date().getTimezoneOffset() * 60) * 1000).getDate() == initDate;
-					});
-
-					// find min temp
-					var minTemp = mappedDates.reduce(function(prev, current) {
-						return Math.min(isNaN(prev) ? prev.main.temp_min : prev, current.main.temp_min);
-					});
-
-					// find max temp
-					var maxTemp = mappedDates.reduce(function(prev, current) {
-						return Math.max(isNaN(prev) ? prev.main.temp_max : prev, current.main.temp_max);
-					});
-
-					var context = $('.weather-box.nav.navbar-nav>li>a').eq(elInd);
-					$('#temp-max-value', context).html(Math.round(maxTemp, 1) + '<sup>°</sup>');
-					$('#temp-min-value', context).html(Math.round(minTemp, 1) + '<sup>°</sup>')
-
-					i += mappedDates.length;
-					elInd++;
-				}
-			}
+			success: processForecastData
 		});
 	</script>
 </body>

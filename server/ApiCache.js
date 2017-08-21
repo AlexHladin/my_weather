@@ -60,7 +60,7 @@ var apiCache = (function() {
 				}
 			},
 			getCachedCurrentWeather: function(place, apiAccessor, next) {
-				var cityId = namesCache[place.city];
+				var cityId = namesCache[place.city.toLowerCase()];
 
 				if (cityId && cache[cityId].currentWeatherUpdateTime - new Date().getTime() < process.env.SCHEDULER_PAUSE) {
 					next(null, cache[cityId].currentWeather);
@@ -86,7 +86,7 @@ var apiCache = (function() {
 									}
 
 									// store input and id of real city
-									namesCache[place.city] = result.id; 
+									namesCache[place.city.toLowerCase()] = result.id; 
 									cache[result.id] = { 
 										currentWeather: result,
 										currentWeatherUpdateTime: new Date().getTime()
