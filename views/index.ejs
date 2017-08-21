@@ -35,7 +35,7 @@
 				      	<input type="text" class="form-control font">
 				    </div>
 			        <br>
-			        <span class="title font">Mostly Cloudy</span> 
+			        <span class="title font"></span> 
 			        <ul  class="nav navbar-nav weather-description">
 			            <li>
 			            	<p id="sunrise-value"></p>
@@ -47,7 +47,7 @@
 			            </li>
 			            <li>
 			            	<p id="barometer-value"></p>
-			            	<p>Visibility 10 km</p>
+			            	<p id="visibility-value"></p>
 			            </li>
 			        </ul>
 			    </div>
@@ -59,56 +59,84 @@
 		                <a>
 		                    <span class="day-name">Tue, 1 </span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">36<sup>°</sup></span><br>
-		                    <span class="temp-night font">21<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>
 		            <li>
 		                <a>
 		                    <span class="day-name">Wed, 2</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">37<sup>°</sup></span><br>
-		                    <span class="temp-night font">22<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>
 		            <li>
 		                <a>
 		                    <span class="day-name">Thu, 3</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">38<sup>°</sup></span><br>
-		                    <span class="temp-night font">25<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>
 		            <li>
 		                <a>
 		                    <span class="day-name">Fri, 4</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">39<sup>°</sup></span><br>
-		                    <span class="temp-night font">28<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>  
 		            <li>
 		                <a>
 		                    <span class="day-name">Sat, 5</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">25<sup>°</sup></span><br>
-		                    <span class="temp-night font">20<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>   
 		            <li>
 		                <a>
 		                    <span class="day-name">Sat, 6</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">26<sup>°</sup></span><br>
-		                    <span class="temp-night font">23<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>  
 		            <li>
 		                <a>
 		                    <span class="day-name">Sat, 7</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">27<sup>°</sup></span><br>
-		                    <span class="temp-night font">26<sup>°</sup></span><br>
+		                    <span class="temp-day font">
+		                    	<p id="temp-max-value"></p>
+		                    </span>
+		                    <span class="temp-night font">
+		                    	<p id="temp-min-value"></p>
+		                    </span>
 		                </a>
 		            </li>    
         		</ul> 
@@ -132,29 +160,70 @@
 	</script>
 
   	<script>
-  		var convertDateToHourMinuteFormat = function(timestamp) {
+  		var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  		var convertTimestampToLocaleTime = function(timestamp) {
   			var time = new Date(timestamp * 1000);
 
-  			// return time.getHours() + ':' + time.getMinutes();
   			return time.toLocaleTimeString();
   		}
 
-		var place = 'Poznan';//$('h1').html();
+  		var convertTimestampToLocaleDateTime = function(timestamp) {
+  			var time = new Date(timestamp * 1000);
+
+  			return days[time.getDay() - 1] + ', ' + time.getDate();
+  		}
+
+		var place = 'Кривой Рог';//$('h1').html();
 
 		$.ajax({
 			method: 'GET',
 			url: '/api/getCurrentWeather/' + place,
 			dataType: 'json',
 			success: function(data) {
-				// $('#content').html(data.main.temp);
 				$('.main-temp.font').html(Math.ceil(data.main.temp));
 				$('.title.font').html(data.weather[0].description);
 				$('#humidity-value').html('Humidity ' + data.main.humidity + '%');
-				$('#barometer-value').html('Barometer' + data.main.pressure + ' mb');
+				$('#barometer-value').html('Barometer ' + data.main.pressure + ' mb');
 				$('#wind-value').html('Wind ' + data.wind.speed + ' m/s ( ' + data.wind.deg + ' )');
 
-				$('#sunrise-value').html('Sunrise ' + convertDateToHourMinuteFormat(data.sys.sunrise));
-				$('#sunset-value').html('Sunset ' + convertDateToHourMinuteFormat(data.sys.sunset));
+				$('#sunrise-value').html('Sunrise ' + convertTimestampToLocaleTime(data.sys.sunrise));
+				$('#sunset-value').html('Sunset ' + convertTimestampToLocaleTime(data.sys.sunset));
+				$('#visibility-value').html('Visibility ' + data.visibility + ' m');
+			}
+		});
+
+		$.ajax({
+			method: 'GET',
+			url: 'api/getForecastWeather/' + place,
+			dataType: 'json',
+			success: function(data) {
+				var i = 0, elInd = 0;
+				while (i < data.list.length) {
+					var dateGroup = [];
+					var initDate = new Date((data.list[i].dt - new Date().getTimezoneOffset() * 60) * 1000).getDate();
+
+					var mappedDates = data.list.filter(function(el) {
+						return new Date((el.dt - new Date().getTimezoneOffset() * 60) * 1000).getDate() == initDate;
+					});
+
+					// find min temp
+					var minTemp = mappedDates.reduce(function(prev, current) {
+						return Math.min(isNaN(prev) ? prev.main.temp_min : prev, current.main.temp_min);
+					});
+
+					// find max temp
+					var maxTemp = mappedDates.reduce(function(prev, current) {
+						return Math.max(isNaN(prev) ? prev.main.temp_max : prev, current.main.temp_max);
+					});
+
+					var context = $('.weather-box.nav.navbar-nav>li>a').eq(elInd);
+					$('#temp-max-value', context).html(Math.round(maxTemp, 1) + '<sup>°</sup>');
+					$('#temp-min-value', context).html(Math.round(minTemp, 1) + '<sup>°</sup>')
+
+					i += mappedDates.length;
+					elInd++;
+				}
 			}
 		});
 	</script>
