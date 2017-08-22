@@ -263,6 +263,7 @@ sup{
 .loading {
     visibility: hidden;
     z-index: 14;
-    margin-left: -26px;
-    color: black;
-}	
+    margin-left: -25px;
+    margin-top: 8px;
+    color: white;
+}

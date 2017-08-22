@@ -27,10 +27,7 @@
 
                 // if input not empty show icon to delete text in input
                 if ($(this).val()) {
-                    $(this).parent().find('#' + options.icon)
-                        .removeClass(options.loadingIcon)
-                        .addClass(options.closeIcon)
-                        .css('visibility', 'visible');
+                    methods.hideIcon.apply($(this));
                 } 
 
                 $(this).parent()
@@ -41,6 +38,7 @@
 
                 // add event listener to empty icon
                 $(this).parent().find('#' + options.icon).bind('click', function() {
+                    console.log('hello');
                     $(this).parent().find('input').val('');
                     $(this).css('visibility', 'hidden');
                 });
@@ -52,21 +50,64 @@
                 });
 
                 $(this).parent().parent().submit(function(event) {
-                    var iconElem = $(this).find('#' + options.icon);
-
-                    if (iconElem.hasClass(options.loadingIcon)) {
-                        iconElem.removeClass(options.loadingIcon);
-                        iconElem.addClass(options.closeIcon);
-                    }
-
-                    options.onSubmit(event, $(this).find('input').val());
-                    methods.hide.apply($('.' + options.className + '-content').parent());
+                    methods.hideIcon.apply($(this).find('input')); // hide icon
+                    options.onSubmit(event, $(this).find('input').val()); // call delegate function
+                    methods.hide.apply($('.' + options.className + '-content').parent()); // hide selection window
                 });
 
                 $(document).click(function(){
                     methods.hide.apply($('.' + options.className + '-content').parent());
                 });
 	          });
+	      },
+	      showLoadingIcon: function() {
+	      	return $(this).each(function() {
+	      		var options = $.data(this, 'myautoInput');
+	      		var iconElem = $(this).parent().find('#' + options.icon);
+
+	      		if (iconElem.css('visibility') == 'hidden')
+                    iconElem.css('visibility', 'visible');
+
+                if (iconElem.hasClass(options.closeIcon))
+                    iconElem.removeClass(options.closeIcon);
+                
+                iconElem.addClass(options.loadingIcon);
+	      	});
+	      },
+	      showCloseIcon: function() {
+	      	return $(this).each(function() {
+	      		var options = $.data(this, 'myautoInput');
+	      		var iconElem = $(this).parent().find('#' + options.icon);
+
+	      		if (iconElem.hasClass(options.loadingIcon))
+	      			iconElem.removeClass(options.loadingIcon);
+
+	      		iconElem.addClass(options.closeIcon);
+	      	});
+	      },
+	      hideLoading: function() {
+	      	return $(this).each(function() {
+	      		var options = $.data(this, 'myautoInput');
+	      		var iconElem = $(this).parent().find('#' + options.icon);
+
+	      		if (iconElem.hasClass(options.loadingIcon))
+	      			iconElem.removeClass(options.loadingIcon);
+                
+                iconElem.addClass(options.closeIcon);
+	      	});
+	      },
+	      hideIcon: function() {
+	      	return $(this).each(function() {
+	      		console.log(this);
+	      		var options = $.data(this, 'myautoInput');
+	      		
+	      		iconElem = $(this)
+	      			.parent()
+	      			.find('#' + options.icon)
+	      			.removeClass(options.loadingIcon)
+                    .addClass(options.closeIcon)
+                    .css('visibility', 'visible');
+	      	});
 	      },
 	      show: function() {
    	        return $(this).each(function() {
@@ -87,16 +128,8 @@
                 var options = $.data(this, 'myautoInput');
 
                 var autoInputElem = this;
-                var iconElem = $(this).parent().find('#' + options.icon);
-                
-                if (iconElem.css('visibility') == 'hidden')
-                    iconElem.css('visibility', 'visible');
-
-                if (iconElem.hasClass(options.closeIcon)) {
-                    iconElem.removeClass(options.closeIcon);
-                    iconElem.addClass(options.loadingIcon);
-                }
-              
+                methods.showLoadingIcon.apply(this);
+                              
                 $.ajax({
                     method: 'GET',
                     url: options.url + $(this).val(),
@@ -121,21 +154,21 @@
                                 }
                             });
 
-                            iconElem.removeClass(options.loadingIcon);
-                            iconElem.addClass(options.closeIcon);
-
+                            // methods.hideLoading.apply(autoInputElem);
                             methods.show.apply(autoInputElem);
                         } else {
+                        	// methods.hideLoading.apply(autoInputElem);
                             methods.hide.apply($('.' + options.className + '-content').parent());
                         }
+
+                        methods.showCloseIcon.apply(autoInputElem);
                     },
           		    error: function(jqXHR, textStatus, errorThrown) {
                         methods.show.apply(autoInputElem);
                         $(autoInputElem).next().find('ul').empty();
                         $(autoInputElem).next().find('ul').append('<div class="text-center">Nothing found</div>');
                         
-                        iconElem.removeClass(options.loadingIcon);
-                        iconElem.addClass(options.closeIcon);
+                        methods.hideLoading.apply(autoInputElem);
                     }
    	            });
 	        });
