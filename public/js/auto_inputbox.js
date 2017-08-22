@@ -51,7 +51,14 @@
                     if (this.value) methods.load.apply($(this));
                 });
 
-                $(this).parent().parent().submit(function(event) {                   
+                $(this).parent().parent().submit(function(event) {
+                    var iconElem = $(this).find('#' + options.icon);
+
+                    if (iconElem.hasClass(options.loadingIcon)) {
+                        iconElem.removeClass(options.loadingIcon);
+                        iconElem.addClass(options.closeIcon);
+                    }
+
                     options.onSubmit(event, $(this).find('input').val());
                     methods.hide.apply($('.' + options.className + '-content').parent());
                 });
