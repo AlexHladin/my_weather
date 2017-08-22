@@ -2,3 +2,4 @@ model.erwin
 node_modules/*
 config/default.json
 package-lock.json
+config/production.txt
