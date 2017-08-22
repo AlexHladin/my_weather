@@ -32,7 +32,7 @@
 					<form action="">
 						<div class="input-group">
 				    		<span class="input-group-addon"><i class="fa fa-home" aria-hidden="true"></i></span>
-				      		<input id="user-input" type="text" class="form-control font">
+				      		<input id="user-input" type="text" class="form-control font" autocomplete="off">
 				    	</div>
 					</form>
 			        <br>
@@ -159,7 +159,13 @@
 			$('#user-input').autoInput({
 				url: '/api/search/',
 				formatElement: function(el) {
-					return el;
+					return el.toUpperCase();
+				},
+				onSubmit: function(event, value) {
+					event.preventDefault();
+
+					loadCurrentWeather(value);
+					loadForecastWeather(value);
 				}
 			});
 
@@ -181,53 +187,8 @@
   			return days[time.getDay() - 1] + ', ' + time.getDate();
   		}
 
-  		var setForecastData = function(minTemp, maxTemp, elInd) {
-  			var context = $('.weather-box.nav.navbar-nav>li>a').eq(elInd);
-			$('#temp-max-value', context).html(Math.round(maxTemp, 1) + '<sup>°</sup>');
-			$('#temp-min-value', context).html(Math.round(minTemp, 1) + '<sup>°</sup>');
-  		}
-
-  		var processForecastData = function(data, next) {
-  			var i = 0, elInd = 0;
-			while (i < data.list.length) {
-				var dateGroup = [];
-				var initDate = new Date((data.list[i].dt - new Date().getTimezoneOffset() * 60) * 1000).getDate();
-
-				var mappedDates = data.list.filter(function(el) {
-					return new Date((el.dt - new Date().getTimezoneOffset() * 60) * 1000).getDate() == initDate;
-				});
-
-				// find min temp
-				var minTemp, maxTemp;
-
-				if (mappedDates.length > 1) { 
-					minTemp = mappedDates.reduce(function(prev, current) {
-						return Math.min(isNaN(prev) ? prev.main.temp_min : prev, current.main.temp_min);
-					});
-
-					// find max temp
-					maxTemp = mappedDates.reduce(function(prev, current) {
-						return Math.max(isNaN(prev) ? prev.main.temp_max : prev, current.main.temp_max);
-					});
-				} else {
-					minTemp = mappedDates[0].main.temp_min;
-					maxTemp = mappedDates[0].main.temp_max;
-				}
-				
-				setForecastData(minTemp, maxTemp, elInd);
-
-				i += mappedDates.length;
-				elInd++;
-			}
-  		}
-
-		var place = $('#country').html();
-
-		$.ajax({
-			method: 'GET',
-			url: '/api/getCurrentWeather/' + place,
-			dataType: 'json',
-			success: function(data) {
+		var loadCurrentWeather = function(place) {
+			var processCurrentWeather = function(data) {
 				$('.main-temp.font').html(Math.ceil(data.main.temp));
 				$('.title.font').html(data.weather[0].description);
 				$('#humidity-value').html('Humidity ' + data.main.humidity + '%');
@@ -237,15 +198,73 @@
 				$('#sunrise-value').html('Sunrise ' + convertTimestampToLocaleTime(data.sys.sunrise));
 				$('#sunset-value').html('Sunset ' + convertTimestampToLocaleTime(data.sys.sunset));
 				$('#visibility-value').html('Visibility ' + data.visibility + ' m');
-			}
-		});
 
-		$.ajax({
-			method: 'GET',
-			url: 'api/getForecastWeather/' + place,
-			dataType: 'json',
-			success: processForecastData
-		});
+				$('#country').html(data.sys.country + ', ' + data.name);
+			}
+
+			$.ajax({
+				method: 'GET',
+				url: '/api/getCurrentWeather/' + place,
+				dataType: 'json',
+				success: processCurrentWeather
+			});
+		}
+
+		var loadForecastWeather = function(place) {
+			var setForecastData = function(minTemp, maxTemp, elInd) {
+	  			var context = $('.weather-box.nav.navbar-nav>li>a').eq(elInd);
+				$('#temp-max-value', context).html(Math.round(maxTemp, 1) + '<sup>°</sup>');
+				$('#temp-min-value', context).html(Math.round(minTemp, 1) + '<sup>°</sup>');
+	  		}			
+
+			var processForecastData = function(data, next) {
+	  			var i = 0, elInd = 0;
+				while (i < data.list.length) {
+					var dateGroup = [];
+					var initDate = new Date((data.list[i].dt - new Date().getTimezoneOffset() * 60) * 1000).getDate();
+
+					var mappedDates = data.list.filter(function(el) {
+						return new Date((el.dt - new Date().getTimezoneOffset() * 60) * 1000).getDate() == initDate;
+					});
+
+					// find min temp
+					var minTemp, maxTemp;
+
+					if (mappedDates.length > 1) { 
+						minTemp = mappedDates.reduce(function(prev, current) {
+							return Math.min(isNaN(prev) ? prev.main.temp_min : prev, current.main.temp_min);
+						});
+
+						// find max temp
+						maxTemp = mappedDates.reduce(function(prev, current) {
+							return Math.max(isNaN(prev) ? prev.main.temp_max : prev, current.main.temp_max);
+						});
+					} else {
+						minTemp = mappedDates[0].main.temp_min;
+						maxTemp = mappedDates[0].main.temp_max;
+					}
+					
+					setForecastData(minTemp, maxTemp, elInd);
+
+					i += mappedDates.length;
+					elInd++;
+				}
+	  		}
+
+			$.ajax({
+				method: 'GET',
+				url: 'api/getForecastWeather/' + place,
+				dataType: 'json',
+				success: processForecastData
+			});
+		}
+
+		$(document).ready(function() {
+			var place = $('#country').html();
+
+			loadCurrentWeather(place);
+			loadForecastWeather(place);
+		});		
 	</script>
 </body>
 </html>
