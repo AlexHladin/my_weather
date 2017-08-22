@@ -16,6 +16,7 @@ var api = require('./routes/api');
 var ApiAccessor = require('./server/ApiAccessor');
 var apiCache = require('./server/ApiCache');
 
+// loggin settings
 const FULL_LOG_PATH = path.join(LOG_PATH, LOG_FILE);
 
 // check if LOG_PATH exist
@@ -37,6 +38,15 @@ var logFile = path.join(__dirname, FULL_LOG_PATH);
 var logFileStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 var app = express();
+
+console.log('Environment', app.get('env'));
+
+if (app.get('env') === 'development') {
+  var config = require('./config/default.json');
+
+  process.env.OPENWEATHER_API_KEY = config['weatherService']['apiKey'];
+  process.env.SCHEDULER_PAUSE = config['schedulerPause'];
+}
 
 // api accessor settings
 var apiAccessor = ApiAccessor.create({
