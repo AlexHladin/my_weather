@@ -1,4 +1,4 @@
-	 
+
 var temp_day;
 var check = false;
 //---------------------------------------------------------------------------------------------------------------
@@ -101,6 +101,9 @@ function convert_C_to_F(){
 		   	if ( $( this ).is( ".title" )) {
 				return;
 			}
+			if ( $( this ).is( ".country" )) {
+					return;
+			}
 		//$( this ).css( "background-color", "yellow" );			
 		ob =  SubStr(ob);
 		ob = Math.round(ob * 1.8000 + 32.00);
@@ -125,7 +128,10 @@ function convert_F_to_C(){
 		if((ob !="") && isNaN(ob)){
 			if ( $( this ).is( ".title" )) {
 				return;
-		}		
+		}	
+		if ( $( this ).is( ".country" )) {
+					return;
+		}	
 		ob =  SubStr(ob);
 		ob = Math.round((ob - 32)/1.8000);
 		}
@@ -139,3 +145,5 @@ function convert_F_to_C(){
 	});
 
 }
+
+

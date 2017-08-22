@@ -10,7 +10,11 @@ router.get('/', (req, res, next) => {
 		req.connection.socket.remoteAddress;
     
 	where.is(ip, (err, result) => {
-		res.render('index', { place: result.get('city') || result.get('region') || result.get('country') });
+		var response = { country: result.get('country') };
+		if (result.get('city') || result.get('region')) 
+			response.city = result.get('city') || result.get('region');
+
+		res.render('index', response);
 	});
 });
 

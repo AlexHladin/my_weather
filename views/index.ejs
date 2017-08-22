@@ -37,6 +37,8 @@
 					</form>
 			        <br>
 			        <span class="title font"></span> 
+			        <span id="country" class="country font"><%=country %>, <%=city %></span>
+            		<span class="title font"></span> 
 			        <ul  class="nav navbar-nav weather-description">
 			            <li>
 			            	<p id="sunrise-value"></p>
@@ -127,19 +129,7 @@
 		                    	<p id="temp-min-value"></p>
 		                    </span>
 		                </a>
-		            </li>  
-		            <li>
-		                <a>
-		                    <span class="day-name">Sat, 7</span><br>
-		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
-		                    <span class="temp-day font">
-		                    	<p id="temp-max-value"></p>
-		                    </span>
-		                    <span class="temp-night font">
-		                    	<p id="temp-min-value"></p>
-		                    </span>
-		                </a>
-		            </li>    
+		            </li>   
         		</ul> 
     		</div>    	
     	<div class="col-md-4"></div>
@@ -231,7 +221,7 @@
 			}
   		}
 
-		var place = 'Кривой Рог';//$('h1').html();
+		var place = $('#country').html();
 
 		$.ajax({
 			method: 'GET',

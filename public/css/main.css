@@ -79,8 +79,8 @@ html, body{
 	font-weight: 400;
 	font-size: 14px;
 }
-.icon > i{
-	color:blue;
+.icon > i, .country{
+	color:blue !important;
 }
 .temp-day, .temp-day > sup{
 	color:white;
@@ -95,8 +95,9 @@ sup{
 }
 .main-temp{
 	font-size: 86pt;
-	margin-top: 50px;
-	color:white;
+    margin-top: 50px;
+    color: white;
+    position: absolute;
 }
 .main-temp > .sup{
 	font-size: 38pt;
@@ -106,9 +107,10 @@ sup{
 .cc{
 	height: 150px;
 	margin-top: 30px;
+	margin-bottom: 70px;
 }
 .weather-description{
-	margin-top: 50px;
+	margin-top: 102px;
 	outline-width:1.2 !important;
 	float: left;
 	position: absolute;
@@ -121,14 +123,23 @@ sup{
  	margin-left: 40px;	
  }
 .title{
-	font-size: 26px;
+	font-size: 24px;
 	color:white;
 	float: left;
+	position: absolute;
+	margin-top: 50px;
+}
+.country{
+	font-size: 34px;
+	color:white;
+	float: left;
+	position: absolute;
+
 }
 
 #C-F{
-	margin-left: 20px;
-	margin-top: 30px;
+	margin-left: 210px;
+	margin-top: 60px;
 	width: 30px; 
 	position: absolute;
 	display: inline;
@@ -219,3 +230,39 @@ sup{
 	color:#00FF6D;
 }
 
+/* AutoInputBox styles */
+.autoInput-content {
+    width: 85%;
+    height: 200px;
+    border: 1px solid #a8a8a8;
+    display: none;
+    position: absolute;
+}
+.autoInput-content ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+}
+.autoInput-content li {
+	margin:0;
+	padding:0;
+}
+.autoInput-content li span {
+	display:block;
+	width:auto;
+	padding:5px;
+	color:white;
+}
+.autoInput-content li span : hover{
+	background-color:aqua;
+	color:navy;
+}
+.loading {
+    visibility: hidden;
+    z-index: 14;
+    margin-left: -26px;
+    color: black;
+}	
