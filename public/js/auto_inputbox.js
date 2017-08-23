@@ -7,6 +7,7 @@
       	        className: 'autoInput',
                 closeIcon: 'fa-times-circle',
                 loadingIcon: 'fa-spinner fa-pulse',
+                nothingFoundMessage: 'Nothing found',
                 formatElement: function(el) {
                     return JSON.stringify(el).substring(20);
                 },
@@ -16,7 +17,12 @@
                 slideDownComplete: function() {
                 },
                 onSubmit: function(event, value) {
-
+                },
+                getRequestPath(input) {
+                    return input;
+                },
+                getRequestParams: function() {
+                    return {};
                 }
    	        }, options || {});
 
@@ -30,15 +36,15 @@
                     methods.hideIcon.apply($(this));
                 } 
 
-                $(this).parent()
-                    .find('.' + options.className + '-content')
-                    .css('width', $(this).css('width')) // set width of drop-down list equivalent to input with
-                    .css('top', this.getBoundingClientRect().top + 4);
-                    //.css('left', this.getBoundingClientRect().left); // fix left position of drop-down list to input
+                var parentRect = $(this).position();                
+ 
+                $(this).parent().find('.' + options.className + '-content')
+                    .css('width', $(this).innerWidth() + 'px') // set width of drop-down list equivalent to input with
+                    .css('top', parentRect.top + $(this).outerHeight() + 'px')
+                    .css('left', parentRect.left + 'px'); // fix left position of drop-down list to input
 
                 // add event listener to empty icon
                 $(this).parent().find('#' + options.icon).bind('click', function() {
-                    console.log('hello');
                     $(this).parent().find('input').val('');
                     $(this).css('visibility', 'hidden');
                 });
@@ -98,7 +104,6 @@
 	      },
 	      hideIcon: function() {
 	      	return $(this).each(function() {
-	      		console.log(this);
 	      		var options = $.data(this, 'myautoInput');
 	      		
 	      		iconElem = $(this)
@@ -132,7 +137,8 @@
                               
                 $.ajax({
                     method: 'GET',
-                    url: options.url + $(this).val(),
+                    url: options.url + options.getRequestPath($(this).val()),
+                    data: options.getRequestParams(),
                     dataType: 'json',                
                     success: function(data) {                        
                         $(autoInputElem).next().find('ul').empty();
@@ -154,11 +160,9 @@
                                 }
                             });
 
-                            // methods.hideLoading.apply(autoInputElem);
                             methods.show.apply(autoInputElem);
                         } else {
-                        	// methods.hideLoading.apply(autoInputElem);
-                            methods.hide.apply($('.' + options.className + '-content').parent());
+                        	methods.hide.apply($('.' + options.className + '-content').parent());
                         }
 
                         methods.showCloseIcon.apply(autoInputElem);
@@ -166,7 +170,7 @@
           		    error: function(jqXHR, textStatus, errorThrown) {
                         methods.show.apply(autoInputElem);
                         $(autoInputElem).next().find('ul').empty();
-                        $(autoInputElem).next().find('ul').append('<div class="text-center">Nothing found</div>');
+                        $(autoInputElem).next().find('ul').append('<div style="text-align: center">' + options.nothingFoundMessage + '</div>');
                         
                         methods.hideLoading.apply(autoInputElem);
                     }

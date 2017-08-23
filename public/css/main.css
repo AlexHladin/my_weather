@@ -232,7 +232,6 @@ sup{
 
 /* AutoInputBox styles */
 .autoInput-content {
-    width: 85%;
     height: 200px;
     border: 1px solid #a8a8a8;
     display: none;
