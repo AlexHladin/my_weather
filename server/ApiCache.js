@@ -22,7 +22,7 @@ var apiCache = (function() {
 			getCachedForecastWeather: function(place, apiAccessor, next) {
 				var cityId = namesCache[place.city.toLowerCase()];
 
-				if (cityId && cache[cityId].forecastWeatherUpdateTime - new Date().getTime() < 3600) {
+				if (cityId && new Date().getTime() - cache[cityId].forecastWeatherUpdateTime > process.env.SCHEDULER_PAUSE) {
 					next(null, cache[cityId].forecastWeather);
 				} else {
 					async.waterfall([
@@ -62,7 +62,7 @@ var apiCache = (function() {
 			getCachedCurrentWeather: function(place, apiAccessor, next) {
 				var cityId = namesCache[place.city.toLowerCase()];
 
-				if (cityId && cache[cityId].currentWeatherUpdateTime - new Date().getTime() < process.env.SCHEDULER_PAUSE) {
+				if (cityId && new Date().getTime() - cache[cityId].currentWeatherUpdateTime > process.env.SCHEDULER_PAUSE) {
 					next(null, cache[cityId].currentWeather);
 				} else {
 					async.waterfall([
