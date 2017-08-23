@@ -53,6 +53,7 @@
                     return false;  
                 }).bind('textchange', function() {
                     if (this.value) methods.load.apply($(this));
+                    else if (!this.value.length) methods.hide.apply($(this).parent().find('.' + options.className + '-content').parent());
                 });
 
                 $(this).parent().parent().submit(function(event) {
