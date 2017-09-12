@@ -39,7 +39,7 @@
                 var parentRect = $(this).position();                
  
                 $(this).parent().find('.' + options.className + '-content')
-                    .css('width', $(this).innerWidth() + 'px') // set width of drop-down list equivalent to input with
+                    .css('width', ($(this).innerWidth()+2) + 'px') // set width of drop-down list equivalent to input with
                     .css('top', parentRect.top + $(this).outerHeight() + 'px')
                     .css('left', parentRect.left + 'px'); // fix left position of drop-down list to input
 

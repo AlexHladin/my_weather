@@ -17,8 +17,7 @@
 <body>
 <div class="conteiner">
 	<div class="col-md-12 md-12" >
-		<div class="col-md-1"></div>
-		<div class="col-md-10">
+		<div class="col-md-10 col-md-offset-1">
     		<div class="col-md-3">
 				<span class="main-temp font"></span>
 		        <ul id="C-F">
@@ -118,9 +117,9 @@
 		                    </span>
 		                </a>
 		            </li>   
-		            <li>
+  		            <li>
 		                <a>
-		                    <span class="day-name">Sat, 6</span><br>
+		                    <span class="day-name">Sun, 6</span><br>
 		                    <span class="icon"><i class="fa fa-sun-o  fa-2x" aria-hidden="true"></i></span><br>
 		                    <span class="temp-day font">
 		                    	<p id="temp-max-value"></p>
@@ -129,13 +128,13 @@
 		                    	<p id="temp-min-value"></p>
 		                    </span>
 		                </a>
-		            </li>   
+		            </li>
         		</ul> 
     		</div>    	
     	<div class="col-md-4"></div>
  	</div>
 
-	<div class="col-md-1"></div>
+
 
 	</div>
 	<div class="col-md-12 md-11" id="particles-js"></div>  
@@ -190,6 +189,7 @@
 		var loadCurrentWeather = function(place) {
 			var processCurrentWeather = function(data) {
 				$('.main-temp.font').html(Math.ceil(data.main.temp));
+				$(".main-temp").append("<span class='sup'>°</span>");
 				$('.title.font').html(data.weather[0].description);
 				$('#humidity-value').html('Humidity ' + data.main.humidity + '%');
 				$('#barometer-value').html('Barometer ' + data.main.pressure + ' mb');

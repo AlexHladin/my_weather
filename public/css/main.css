@@ -13,6 +13,13 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
     color: #a8a8a8;
 }
  
+.input-group .form-control{
+	position: static;
+}
+.input-group > #myautoInputIcon{
+	cursor:pointer;
+}
+
 a, a:hover, a:active{
 	text-decoration: none;
 	color: #a8a8a8;;
@@ -48,6 +55,7 @@ html, body{
 .weather-box > li{
 	color:blue;
 	width: 100px;
+	height: 100%;
 }
 
 .active-day{
@@ -82,7 +90,7 @@ html, body{
 .icon > i, .country{
 	color:blue !important;
 }
-.temp-day, .temp-day > sup{
+.temp-day > p, .temp-day > p > sup{
 	color:white;
 	font-size: 28px;
 }
@@ -119,7 +127,7 @@ sup{
 
 	font-size: 14px;
  }
- .weather-description > li:nth-of-type(2),  .weather-description > li:nth-of-type(3), .col-md-10 > .cc{
+ .weather-description > li:nth-of-type(2),  .weather-description > li:nth-of-type(3){
  	margin-left: 40px;	
  }
 .title{
@@ -233,7 +241,7 @@ sup{
 /* AutoInputBox styles */
 .autoInput-content {
     height: 200px;
-    border: 1px solid #a8a8a8;
+    border: 1px solid rgb(34, 34, 34);
     display: none;
     position: absolute;
 }
@@ -244,10 +252,14 @@ sup{
     width: 100%;
     height: 200px;
     overflow: auto;
+    /*-------------------------*/
+    background: #000;
+	z-index: 10;
+	position: absolute;
 }
 .autoInput-content li {
 	margin:0;
-	padding:0;
+	padding: 10px 20px;
 }
 .autoInput-content li span {
 	display:block;
