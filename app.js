@@ -1,20 +1,23 @@
 const LOG_PATH = 'logs';
 const LOG_FILE = 'server.log';
 
-var express = require('express');
-var path = require('path');
-var fs = require('fs');
-var mkdirp = require('mkdirp');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const favicon = require('serve-favicon');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var api = require('./routes/api');
+const index = require('./routes/index');
+const api = require('./routes/api');
 
-var ApiAccessor = require('./server/ApiAccessor');
-var apiCache = require('./server/ApiCache');
+const ApiAccessor = require('./server/ApiAccessor');
+const apiCache = require('./server/ApiCache');
+
+// Middleware
+const byIPDetector = require('./middleware/ByIPDetector');
 
 // loggin settings
 const FULL_LOG_PATH = path.join(LOG_PATH, LOG_FILE);
@@ -65,6 +68,7 @@ app.use(morgan('combined', { stream: logFileStream }));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(byIPDetector);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
