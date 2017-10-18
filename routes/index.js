@@ -4,11 +4,15 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-	console.log(Object.keys(req));  
-	var response = { country: req.where.get('country') };
-	if (req.where.get('city') || req.where.get('region')) 
-		response.city = req.where.get('city') || req.where.get('region');
-
+	var response = Object.assign({
+		city: '',
+		country: ''
+	}, 
+	{ 
+		city: req.where.get('city') || req.where.get('region'),
+		country: req.where.get('country') 
+	});
+	
 	res.render('index', response);
 });
 
