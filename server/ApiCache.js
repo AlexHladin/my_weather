@@ -1,5 +1,8 @@
-var async = require('async');
-var where = require('node-where');
+const async = require('async');
+const where = require('node-where');
+const Promise = require('bluebird'); 
+
+let whereIs = Promise.promisify(where.is);
 
 /* singleton */
 var apiCache = (function() {
@@ -30,19 +33,18 @@ var apiCache = (function() {
 							if (cityId) {
 								cb(null, { id: cityId });
 							} else if (place.city && place.city.length) {
-								where.is(place.city, (error, whereRes) => {
-									cb(null, { city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') });
-								});
+								whereIs(place.city)
+									.then((whereRes) => {
+										cb(null, { 
+											city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') 
+										});
+									})
+									.catch((err) => cb(err));
 							} else cb('City id not found');
 						},
 						(whereRes, cb) => {
-							try {
-								apiAccessor.getForecastWeather(whereRes, (error, result) => {
-									if (error) {
-										next(error);
-										return;
-									}
-									
+							apiAccessor.getForecastWeather(whereRes)
+								.then((result) => {
 									// store input and id of real city
 									namesCache[place.city.toLowerCase()] = result.city.id;
 									cache[result.city.id] = {
@@ -50,11 +52,11 @@ var apiCache = (function() {
 										forecastWeatherUpdateTime: new Date().getTime()
 									};
 
-									next(null, result);
-								});
-							} catch (ex) {
-								cb(ex);
-							}
+									cb(null, result);
+								})
+								.catch((error) => {
+									cb(error);
+								});							
 						}
 					], next);
 				}
@@ -70,21 +72,20 @@ var apiCache = (function() {
 							if (cityId) {
 								cb(null, { id: cityId });
 							} else if (place.city && place.city.length) {
-								where.is(place.city, (error, whereRes) => {
-									cb(null, { city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') });
-								});
+								whereIs(place.city)
+									.then((whereRes) => {
+										cb(null, { 
+											city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') 
+										});
+									})
+									.catch((err) => cb(err));
 							} else {
 								cb('City id not found');
 							}
 						},
 						(whereRes, cb) => {
-							try {
-								apiAccessor.getCurrentWeather(whereRes, (error, result) => {
-									if (error) {
-										cb(error);
-										return;
-									}
-
+							apiAccessor.getCurrentWeather(whereRes)
+								.then((result) => {
 									// store input and id of real city
 									namesCache[place.city.toLowerCase()] = result.id; 
 									cache[result.id] = { 
@@ -93,10 +94,10 @@ var apiCache = (function() {
 									};
 
 									cb(null, result);
+								})
+								.catch((error) => {
+									cb(error);
 								});
-							} catch (ex) {
-								next(ex);
-							}
 						}
 						], next);
 				}
