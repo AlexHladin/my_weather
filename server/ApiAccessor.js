@@ -1,4 +1,4 @@
-const request = require('request');
+const rp = require('request-promise');
 
 /**
  * Constructor for an ApiAccessor.
@@ -30,7 +30,7 @@ ApiAccessor.create = function(options) {
 	);
 }
 
-ApiAccessor.prototype.getForecastWeather = function(requestOptions, next) {
+ApiAccessor.prototype.getForecastWeather = async function(requestOptions, next) {
 	if (!requestOptions.city && !requestOptions.id) {
 		next('No City specified.');
 		return;
@@ -48,18 +48,14 @@ ApiAccessor.prototype.getForecastWeather = function(requestOptions, next) {
 		json: true
 	};
 
-	request(urlOptions, (err, resp, body) => {
-		if (err) {
-			next(err);
-		} else if (body && body.cod == 200) {
-			next(err, body);
-		} else {
-			next('No result from OpenWeatherMap API');
-		}
-	});
+	try {
+		return await rp(urlOptions);
+	} catch (e) {
+		return err;
+	}
 }
 
-ApiAccessor.prototype.getCurrentWeather = function(requestOptions, next) {
+ApiAccessor.prototype.getCurrentWeather = async function(requestOptions, next) {
 	if (!requestOptions.city && !requestOptions.id) {
 		next('No City specified.');
 		return;
@@ -77,16 +73,11 @@ ApiAccessor.prototype.getCurrentWeather = function(requestOptions, next) {
 		json: true
 	};
 	
-	request(urlOptions, (err, resp, body) => {
-		if (err) {
-			console.error(err);
-			next(err) 
-		} else if (body && body.cod == 200) {
-			next(err, body);
-		} else {
-			next('No result from OpenWeatherMap API');
-		}
-    });
+	try {
+		return await rp(urlOptions);
+	} catch (e) {
+		return e;
+    };
 };
 
 module.exports = ApiAccessor;

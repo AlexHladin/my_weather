@@ -19,7 +19,8 @@ router.get('/getCurrentWeather/:city', (req, res, next) => {
 });
 
 router.get('/search/:input', (req, res, next) => {
-	var filteredCities = Object.keys(apiCache.getInstance().getNamesCache()).filter((e) => {
+	let cityNames = Object.keys(apiCache.getInstance().getNamesCache());
+	let filteredCities = cityNames.filter((e) => {
 			return e.indexOf(req.params.input) >= 0;
 		});
 
