@@ -14,6 +14,16 @@ var apiCache = (function() {
 		var namesCache = {};
 		var cache = {};
 
+		function getCityDataByName(city) {
+			let cityId = namesCache[city.toLowerCase()];
+
+			if (cityId && new Date().getTime() - cache[cityId].forecastWeatherUpdateTime > process.env.SCHEDULER_PAUSE) {
+				return cache[cityId];
+			}
+
+			return null;
+		}
+
 		return {
 			// public variables and methods
 			getNamesCache: function() {
@@ -23,16 +33,15 @@ var apiCache = (function() {
 				return cache;
 			},
 			getCachedForecastWeather: function(place, apiAccessor, next) {
-				var cityId = namesCache[place.city.toLowerCase()];
+				let cityData = getCityDataByName(place.city.toLowerCase());
+				let forecastData;
 
-				if (cityId && new Date().getTime() - cache[cityId].forecastWeatherUpdateTime > process.env.SCHEDULER_PAUSE) {
-					next(null, cache[cityId].forecastWeather);
+				if (cityData) {
+					forecastData = cityData.forecastWeather;
 				} else {
 					async.waterfall([
 						(cb) => {
-							if (cityId) {
-								cb(null, { id: cityId });
-							} else if (place.city && place.city.length) {
+							if (place.city && place.city.length) {
 								whereIs(place.city)
 									.then((whereRes) => {
 										cb(null, { 
@@ -62,16 +71,15 @@ var apiCache = (function() {
 				}
 			},
 			getCachedCurrentWeather: function(place, apiAccessor, next) {
-				var cityId = namesCache[place.city.toLowerCase()];
+				let cityData = getCityDataByName(place.city.toLowerCase());
+				let forecastData;
 
-				if (cityId && new Date().getTime() - cache[cityId].currentWeatherUpdateTime > process.env.SCHEDULER_PAUSE) {
-					next(null, cache[cityId].currentWeather);
+				if (cityData) {
+					forecastData = cityData.currentWeather;
 				} else {
 					async.waterfall([
 						(cb) => {
-							if (cityId) {
-								cb(null, { id: cityId });
-							} else if (place.city && place.city.length) {
+							if (place.city && place.city.length) {
 								whereIs(place.city)
 									.then((whereRes) => {
 										cb(null, { 
