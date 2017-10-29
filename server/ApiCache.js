@@ -1,126 +1,94 @@
-const async = require('async');
-const where = require('node-where');
-const Promise = require('bluebird'); 
+'use strict'
 
-let whereIs = Promise.promisify(where.is);
+const async = require('async')
+const where = require('node-where')
+const Promise = require('bluebird')
+
+let whereIs = Promise.promisify(where.is)
 
 /* singleton */
-var apiCache = (function() {
+let apiCache = (function () {
+  let instance
 
-	var instance;
-
-	function init() {
+  function init () {
 		// private variables and methods
-		var namesCache = {};
-		var cache = {};
+    let namesCache = {}
+    let cache = {}
 
-		function getCityDataByName(city) {
-			let cityId = namesCache[city.toLowerCase()];
+    function getCityDataByName (city, param) {
+      let cityId = namesCache[city.toLowerCase()]
 
-			if (cityId && new Date().getTime() - cache[cityId].forecastWeatherUpdateTime > process.env.SCHEDULER_PAUSE) {
-				return cache[cityId];
-			}
+      if (cityId && new Date().getTime() - cache[cityId][param] < process.env.SCHEDULER_PAUSE) {
+        return cache[cityId]
+      }
 
-			return null;
-		}
+      return null
+    }
 
-		return {
+    return {
 			// public variables and methods
-			getNamesCache: function() {
-				return namesCache;
-			},
-			getCache: function() {
-				return cache;
-			},
-			getCachedForecastWeather: function(place, apiAccessor, next) {
-				let cityData = getCityDataByName(place.city.toLowerCase());
-				let forecastData;
+      getNamesCache: function () {
+        return namesCache
+      },
+      getCache: function () {
+        return cache
+      },
+      getCachedForecastWeather: async (place, apiAccessor) => {
+        let cityData = getCityDataByName(place.city.toLowerCase(), 'forecastWeatherUpdateTime')
+        let forecastData
 
-				if (cityData) {
-					forecastData = cityData.forecastWeather;
-				} else {
-					async.waterfall([
-						(cb) => {
-							if (place.city && place.city.length) {
-								whereIs(place.city)
-									.then((whereRes) => {
-										cb(null, { 
-											city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') 
-										});
-									})
-									.catch((err) => cb(err));
-							} else cb('City id not found');
-						},
-						(whereRes, cb) => {
-							apiAccessor.getForecastWeather(whereRes)
-								.then((result) => {
-									// store input and id of real city
-									namesCache[place.city.toLowerCase()] = result.city.id;
-									cache[result.city.id] = {
-										forecastWeather: result,
-										forecastWeatherUpdateTime: new Date().getTime()
-									};
+        if (cityData) {
+          forecastData = cityData.forecastWeather
+        } else if (place.city && place.city.length) {
+						let whereRes = await whereIs(place.city)
+						whereRes.city = whereRes.get('city') || whereRes.get('region') || whereRes.get('country')
 
-									cb(null, result);
-								})
-								.catch((error) => {
-									cb(error);
-								});							
+						let response = await apiAccessor.getForecastWeather(whereRes)
+						// store input and id of real city
+						namesCache[place.city.toLowerCase()] = response.city.id
+						cache[response.city.id] = {
+							forecastWeather: response,
+							forecastWeatherUpdateTime: new Date().getTime()
 						}
-					], next);
-				}
-			},
-			getCachedCurrentWeather: function(place, apiAccessor, next) {
-				let cityData = getCityDataByName(place.city.toLowerCase());
-				let forecastData;
 
-				if (cityData) {
-					forecastData = cityData.currentWeather;
-				} else {
-					async.waterfall([
-						(cb) => {
-							if (place.city && place.city.length) {
-								whereIs(place.city)
-									.then((whereRes) => {
-										cb(null, { 
-											city: whereRes.get('city') || whereRes.get('region') || whereRes.get('country') 
-										});
-									})
-									.catch((err) => cb(err));
-							} else {
-								cb('City id not found');
-							}
-						},
-						(whereRes, cb) => {
-							apiAccessor.getCurrentWeather(whereRes)
-								.then((result) => {
-									// store input and id of real city
-									namesCache[place.city.toLowerCase()] = result.id; 
-									cache[result.id] = { 
-										currentWeather: result,
-										currentWeatherUpdateTime: new Date().getTime()
-									};
+          	forecastData = response;
+				} else throw new Error('City not found')
 
-									cb(null, result);
-								})
-								.catch((error) => {
-									cb(error);
-								});
-						}
-						], next);
-				}
-			}
-		}
-	}
+        return forecastData
+      },
+      getCachedCurrentWeather: async (place, apiAccessor, next) => {
+        let cityData = getCityDataByName(place.city.toLowerCase(), 'currentWeatherUpdateTime')
+        let currentWeatherData
 
-	return {
-		getInstance: function() {
-			if (!instance) instance = init();
+        if (cityData) {
+          currentWeatherData = cityData.currentWeather
+        } else if (place.city && place.city.length) {
+					let whereRes = await whereIs(place.city)
+					whereRes.city = whereRes.get('city') || whereRes.get('region') || whereRes.get('country')
 
-			return instance;
-		}
-	}
-})();
+					let response = await apiAccessor.getCurrentWeather(whereRes)
+					// store input and id of real city
+					namesCache[place.city.toLowerCase()] = response.id
+					cache[response.id] = {
+						currentWeather: response,
+						currentWeatherUpdateTime: new Date().getTime()
+					}
 
+          currentWeatherData = response
+        } else throw new Error('City not found')
 
-module.exports = apiCache;
+				return currentWeatherData
+      }
+    }
+  }
+
+  return {
+    getInstance: function () {
+      if (!instance) instance = init()
+
+      return instance
+    }
+  }
+})()
+
+module.exports = apiCache
