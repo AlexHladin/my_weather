@@ -1,6 +1,5 @@
 'use strict'
 
-const async = require('async')
 const where = require('node-where')
 const Promise = require('bluebird')
 
@@ -40,19 +39,19 @@ let apiCache = (function () {
         if (cityData) {
           forecastData = cityData.forecastWeather
         } else if (place.city && place.city.length) {
-						let whereRes = await whereIs(place.city)
-						whereRes.city = whereRes.get('city') || whereRes.get('region') || whereRes.get('country')
+          let whereRes = await whereIs(place.city)
+          whereRes.city = whereRes.get('city') || whereRes.get('region') || whereRes.get('country')
 
-						let response = await apiAccessor.getForecastWeather(whereRes)
+          let response = await apiAccessor.getForecastWeather(whereRes)
 						// store input and id of real city
-						namesCache[place.city.toLowerCase()] = response.city.id
-						cache[response.city.id] = {
-							forecastWeather: response,
-							forecastWeatherUpdateTime: new Date().getTime()
-						}
+          namesCache[place.city.toLowerCase()] = response.city.id
+          cache[response.city.id] = {
+            forecastWeather: response,
+            forecastWeatherUpdateTime: new Date().getTime()
+          }
 
-          	forecastData = response;
-				} else throw new Error('City not found')
+          	forecastData = response
+        } else throw new Error('City not found')
 
         return forecastData
       },
@@ -63,21 +62,21 @@ let apiCache = (function () {
         if (cityData) {
           currentWeatherData = cityData.currentWeather
         } else if (place.city && place.city.length) {
-					let whereRes = await whereIs(place.city)
-					whereRes.city = whereRes.get('city') || whereRes.get('region') || whereRes.get('country')
+          let whereRes = await whereIs(place.city)
+          whereRes.city = whereRes.get('city') || whereRes.get('region') || whereRes.get('country')
 
-					let response = await apiAccessor.getCurrentWeather(whereRes)
+          let response = await apiAccessor.getCurrentWeather(whereRes)
 					// store input and id of real city
-					namesCache[place.city.toLowerCase()] = response.id
-					cache[response.id] = {
-						currentWeather: response,
-						currentWeatherUpdateTime: new Date().getTime()
-					}
+          namesCache[place.city.toLowerCase()] = response.id
+          cache[response.id] = {
+            currentWeather: response,
+            currentWeatherUpdateTime: new Date().getTime()
+          }
 
           currentWeatherData = response
         } else throw new Error('City not found')
 
-				return currentWeatherData
+        return currentWeatherData
       }
     }
   }
