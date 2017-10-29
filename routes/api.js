@@ -4,7 +4,7 @@ const router = express.Router()
 const apiCache = require('./../server/ApiCache')
 
 /* GET api listing. */
-router.get('/getForecastWeather/:city', async (req, res, next) => {
+router.get('/getForecastWeather/:city', async function(req, res, next) {
   try {
     let response = await apiCache.getInstance().getCachedForecastWeather(req.params, req.app.get('apiAccessor'))
     res.send(response)
@@ -13,7 +13,7 @@ router.get('/getForecastWeather/:city', async (req, res, next) => {
   }
 })
 
-router.get('/getCurrentWeather/:city', async (req, res, next) => {
+router.get('/getCurrentWeather/:city', async function(req, res, next) {
   try {
     let response = await apiCache.getInstance().getCachedCurrentWeather(req.params, req.app.get('apiAccessor'))
     res.send(response)
