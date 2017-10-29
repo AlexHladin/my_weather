@@ -95,7 +95,7 @@ app.use(function (err, req, res, next) {
 })
 
 // schedulars
-setInterval(() => {
+setInterval(async () => {
   let cache = apiCache.getInstance().getCache()
   let currentTime = new Date().getTime()
 
@@ -103,18 +103,23 @@ setInterval(() => {
     // update current weather
     if (cache[obj].currentWeatherUpdateTime && (currentTime - cache[obj].currentWeatherUpdateTime >= process.env.SCHEDULER_PAUSE)) {
       console.log('Update current weather of', obj, 'city')
-
-      apiAccessor.getCurrentWeather({id: obj})
-        .then(() => console.log('Current weather of city', obj, 'succesful updated'))
-        .catch((e) => console.error('Current weather of city not updated', e))
+      try {
+        apiAccessor.getCurrentWeather({id: obj})
+        console.log('Current weather of city', obj, 'succesful updated')
+      } catch (e) {
+        console.error('Current weather of city not updated', e)
+      }
     }
 
     // update forecast weather
     if (cache[obj].forecastWeatherUpdateTime && (currentTime - cache[obj].forecastWeatherUpdateTime >= process.env.SCHEDULER_PAUSE)) {
       console.log('Update forecast weather of', obj, 'city')
-      apiAccessor.getForecastWeather({id: obj})
-        .then(() => console.log('Forecast weather of city', obj, 'succesful updated'))
-        .catch((e) => console.error('Forecast weather not updated', e))
+      try {
+        await apiAccessor.getForecastWeather({id: obj})
+        console.log('Forecast weather of city', obj, 'succesful updated')
+      } catch (e) {
+        console.error('Forecast weather not updated', e)
+      }
     }
   }
 }, process.env.SCHEDULER_PAUSE)
